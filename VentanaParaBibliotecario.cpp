@@ -1,5 +1,5 @@
 #include "VentanaParaBibliotecario.h"
-#include "DialogoPrestamo.h"
+#include "wx_prestamo.h"
 #include "DialogoHistorial.h"
 #include <wx/msgdlg.h>
 #include "Dialogo_Eliminar.h"
@@ -10,6 +10,7 @@ using namespace std;
 
 VentanaParaBibliotecario::VentanaParaBibliotecario(wxWindow *parent) : MyFrameInicioCorrectoBibliotecario(parent) {
 	///Para crear columnas a la Tabla, en diseñador no encontre opcion
+	sistema = new System();
 	
 	///AlUMNO
 	m_list_Alumnos->InsertColumn(0, "ID", wxLIST_FORMAT_LEFT, 50);
@@ -37,7 +38,7 @@ void VentanaParaBibliotecario::CargarListaAlumnos(wxListCtrl* lista){
 	
 	//
 	lista->Freeze();
-	vAlumno = sistema.VerContenido<Alumno>(sistema.pathAlumnos(),true);
+	vAlumno = sistema->VerContenido<Alumno>(sistema->alumnos(),true);
 	for(int i=0;i<vAlumno.size();i++) { 
 		///Llenamos con ID
 		long index = lista -> InsertItem(i, wxString::Format("%d",vAlumno[i].VerID()));
@@ -60,7 +61,7 @@ void VentanaParaBibliotecario::CargarListaBibliotecario(wxListCtrl* lista){
 	
 	//
 	lista->Freeze();
-	vBibliotecario = sistema.VerContenido<Bibliotecario>(sistema.pathBibliotecarios(),true);
+	vBibliotecario = sistema->VerContenido<Bibliotecario>(sistema->bibliotecarios(),true);
 	for(int i=0;i<vBibliotecario.size();i++) { 
 		///Llenamos con ID
 		long index = lista -> InsertItem(i, wxString::Format("%d",vBibliotecario[i].VerID()));
@@ -256,7 +257,7 @@ void VentanaParaBibliotecario::onclickbutton_eliminar( wxCommandEvent& event )  
 		if(id != -1){
 			if(id >= 0 and id <= vAlumno.size()){
 				
-				Dialogo_Eliminar *nueva= new Dialogo_Eliminar(this,id,sistema.pathAlumnos(),3,vAlumno[id].VerNombre());
+				Dialogo_Eliminar *nueva= new Dialogo_Eliminar(this,id,sistema,sistema->alumnos(),2,vAlumno[id].VerNombre());
 				if (nueva->ShowModal() == wxID_OK){
 					CargarListaBibliotecario(m_list_Alumnos);
 				}

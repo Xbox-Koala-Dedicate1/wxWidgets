@@ -6,13 +6,14 @@
 #include "Funcionalidades/bibliotecario/bibliotecario.h"
 #include "Funcionalidades/buscador/buscador.h"
 #include <vector>
+#include "ProyBaseBibliotecario.h"
 using namespace std;
 
 
 class VentanaParaBibliotecario : public MyFrameInicioCorrectoBibliotecario {
 	
 private:
-	System sistema; Buscador navega;
+	System *sistema; Buscador navega;
 	vector<Alumno> vAlumno; vector<Bibliotecario> vBibliotecario;
 	vector<Libro> vLibro;
 	

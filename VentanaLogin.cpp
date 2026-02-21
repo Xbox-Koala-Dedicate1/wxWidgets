@@ -23,8 +23,8 @@ void VentanaLogin::OnclikBienvenido_Iniciar( wxCommandEvent& event )  {
 	}
 	
 	System sistema;
-	vectorAlumnos = sistema.VerContenido<Alumno>(sistema.pathAlumnos(),true);
-	vectorBibliotecario= sistema.VerContenido<Bibliotecario>(sistema.pathBibliotecarios(),true);
+	vectorAlumnos = sistema.VerContenido<Alumno>(sistema.alumnos(),true);
+	vectorBibliotecario= sistema.VerContenido<Bibliotecario>(sistema.bibliotecarios(),true);
 	
 	int PosBibliotecario = BuscarDniEnBibliotecarios(dni, vectorBibliotecario);
 	

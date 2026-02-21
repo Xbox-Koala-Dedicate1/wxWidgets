@@ -3,7 +3,7 @@
 #include "wxfb_project.h"
 #include "Funcionalidades/login/login.h"
 #include "Funcionalidades/system/system.h"
-
+#include "ProyBaseLogin.h"
 class VentanaLogin : public MyFrameLogin {
 	
 private:

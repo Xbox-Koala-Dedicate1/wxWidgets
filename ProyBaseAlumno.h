@@ -65,19 +65,22 @@ class MyFrameInicioCorrectoAlumno : public wxFrame
 		wxPanel* m_panel_Alumnos;
 		wxListCtrl* m_list_Alumnos;
 		wxButton* m_button13;
+		wxButton* m_button17;
+		wxButton* m_button142;
 		wxButton* m_button14;
+		wxButton* m_button15;
 		wxPanel* m_panel_Bibliotecarios;
 		wxListCtrl* m_list_Bibliotecarios;
+		wxButton* m_button132;
 		wxButton* button_eliminar;
 
 		// Virtual event handlers, override them in your derived class
 		virtual void Onclick_Boton_Buscar_Frase( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRadioButton_CambiaPestana( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnButtonClickPrestarLibro( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnButtonClickHistorialAlumno( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnButtonClickAgregar( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnButtonClickEliminar( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onclickbutton_eliminar( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnButtonClickPrestarLibro( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnButtonClickHistorialAlumno( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:

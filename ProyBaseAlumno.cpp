@@ -185,8 +185,17 @@ MyFrameInicioCorrectoAlumno::MyFrameInicioCorrectoAlumno( wxWindow* parent, wxWi
 	m_button13 = new wxButton( m_panel_Alumnos, wxID_ANY, wxT("Prestar"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer45->Add( m_button13, 0, wxALL, 5 );
 
+	m_button17 = new wxButton( m_panel_Alumnos, wxID_ANY, wxT("Devolucion"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer45->Add( m_button17, 0, wxALL, 5 );
+
+	m_button142 = new wxButton( m_panel_Alumnos, wxID_ANY, wxT("Agregar"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer45->Add( m_button142, 0, wxALL, 5 );
+
 	m_button14 = new wxButton( m_panel_Alumnos, wxID_ANY, wxT("Historial"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer45->Add( m_button14, 0, wxALL, 5 );
+
+	m_button15 = new wxButton( m_panel_Alumnos, wxID_ANY, wxT("Eliminar"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer45->Add( m_button15, 0, wxALL, 5 );
 
 
 	bSizerContenedorAlumnos->Add( bSizer45, 0, wxEXPAND, 5 );
@@ -211,6 +220,9 @@ MyFrameInicioCorrectoAlumno::MyFrameInicioCorrectoAlumno( wxWindow* parent, wxWi
 
 	wxBoxSizer* bSizer77;
 	bSizer77 = new wxBoxSizer( wxVERTICAL );
+
+	m_button132 = new wxButton( m_panel_Bibliotecarios, wxID_ANY, wxT("Agregar"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer77->Add( m_button132, 0, wxALL, 5 );
 
 	button_eliminar = new wxButton( m_panel_Bibliotecarios, wxID_ANY, wxT("Eliminar"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer77->Add( button_eliminar, 0, wxALL, 5 );
@@ -242,13 +254,16 @@ MyFrameInicioCorrectoAlumno::MyFrameInicioCorrectoAlumno( wxWindow* parent, wxWi
 	m_radio_Etiquetas->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnRadioButton_CambiaPestana ), NULL, this );
 	m_radio_Alumnos->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnRadioButton_CambiaPestana ), NULL, this );
 	m_radio_Bibliotecarios->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnRadioButton_CambiaPestana ), NULL, this );
-	m_button131->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnButtonClickPrestarLibro ), NULL, this );
-	m_button141->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnButtonClickHistorialAlumno ), NULL, this );
+	m_button131->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnButtonClickAgregar ), NULL, this );
+	m_button141->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnButtonClickEliminar ), NULL, this );
 	m_button1311->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnButtonClickAgregar ), NULL, this );
 	m_button1411->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnButtonClickEliminar ), NULL, this );
 	m_button13->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnButtonClickPrestarLibro ), NULL, this );
+	m_button142->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnButtonClickAgregar ), NULL, this );
 	m_button14->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnButtonClickHistorialAlumno ), NULL, this );
-	button_eliminar->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::onclickbutton_eliminar ), NULL, this );
+	m_button15->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnButtonClickEliminar ), NULL, this );
+	m_button132->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnButtonClickAgregar ), NULL, this );
+	button_eliminar->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnButtonClickEliminar ), NULL, this );
 }
 
 MyFrameInicioCorrectoAlumno::~MyFrameInicioCorrectoAlumno()
@@ -260,12 +275,15 @@ MyFrameInicioCorrectoAlumno::~MyFrameInicioCorrectoAlumno()
 	m_radio_Etiquetas->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnRadioButton_CambiaPestana ), NULL, this );
 	m_radio_Alumnos->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnRadioButton_CambiaPestana ), NULL, this );
 	m_radio_Bibliotecarios->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnRadioButton_CambiaPestana ), NULL, this );
-	m_button131->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnButtonClickPrestarLibro ), NULL, this );
-	m_button141->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnButtonClickHistorialAlumno ), NULL, this );
+	m_button131->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnButtonClickAgregar ), NULL, this );
+	m_button141->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnButtonClickEliminar ), NULL, this );
 	m_button1311->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnButtonClickAgregar ), NULL, this );
 	m_button1411->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnButtonClickEliminar ), NULL, this );
 	m_button13->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnButtonClickPrestarLibro ), NULL, this );
+	m_button142->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnButtonClickAgregar ), NULL, this );
 	m_button14->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnButtonClickHistorialAlumno ), NULL, this );
-	button_eliminar->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::onclickbutton_eliminar ), NULL, this );
+	m_button15->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnButtonClickEliminar ), NULL, this );
+	m_button132->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnButtonClickAgregar ), NULL, this );
+	button_eliminar->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnButtonClickEliminar ), NULL, this );
 
 }
