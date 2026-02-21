@@ -1,11 +1,11 @@
 #include "VentanaParaAlumno.h"
 #include "wx_prestamo.h"
-#include "DialogoHistorial.h"
-#include "DialogoAgregar.h"
-#include "Dialogo_Eliminar.h"
+#include "wxfb_historial.h"
+#include "wx_agregar.h"
+#include "wx_eliminar.h"
 #include "Funcionalidades/system/system.h"
 #include "Funcionalidades/bibliotecario/bibliotecario.h"
-#include "DialogoAgregarPersona.h"
+#include "wx_agregarpersona.h"
 
 using namespace std;
 
