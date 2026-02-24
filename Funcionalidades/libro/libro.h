@@ -3,40 +3,40 @@
 #include <cstring>
 #include <iostream>
 
+#include <vector>
 using namespace std;
 
-class Libro
-{
-	bool existe;
+class Libro{
 	size_t id;
 	char nombre[50];
 	int diasRestantes;
 	bool disponible; // Quitamos la inicializaci�n aqu� para hacerlo en el constructor
 	bool caduco;
-	
+	char autor [20];
 public:
 	Libro()
 	{
 		id = -1;
 		disponible = true;
 		diasRestantes = 0;
-		existe= true;
 	};
 	
-	Libro(size_t id, const char* nombre)
-	{
+	Libro(size_t id, const char* nombre ,const char* autor){
 		this->id = id;
 		strncpy(this->nombre, nombre, 49);
 		this->nombre[49] = '\0';
 		this->disponible = true; // Por defecto disponible
 		this->caduco = false;
 		this->diasRestantes = 0;
-		existe = true;
+		strncpy(this->autor,autor, 19);
+		this->autor[19]= '\0';
 	}
 	
 	size_t VerID() const;
 	const char* VerNombre() const;
+	const char* VerAutor() const;
 	void CambiarNombre(const char* NuevoNombre);
+	void Agregar_Lectores(size_t x);
 	
 	// M�todos corregidos
 	bool EstadoDisponibilidad() const; 
@@ -45,10 +45,7 @@ public:
 	void CambiarEstado(bool estado); // 1 expirado, 0 no expirado
 	void RestarDia(); 
 	void DiasRestantes(int dias);
-	void Existe(){existe = true;}
-	void NoExiste(){existe = false;}
-	bool Existencia(){return existe;}
-		
+	
 	bool operator==(const Libro& otro) const;
 };
 #endif

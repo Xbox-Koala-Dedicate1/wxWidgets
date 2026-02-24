@@ -41,6 +41,9 @@ MyFrameInicioCorrectoAlumno::MyFrameInicioCorrectoAlumno( wxWindow* parent, wxWi
 	m_radio_InfoLibros = new wxRadioButton( this, wxID_ANY, wxT("Info Libros"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer8->Add( m_radio_InfoLibros, 0, wxALL, 5 );
 
+	m_radio_Reservar = new wxRadioButton( this, wxID_ANY, wxT("Reservas"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer8->Add( m_radio_Reservar, 0, wxALL, 5 );
+
 	m_radio_Etiquetas = new wxRadioButton( this, wxID_ANY, wxT("Etiquetas"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer8->Add( m_radio_Etiquetas, 0, wxALL, 5 );
 
@@ -136,6 +139,48 @@ MyFrameInicioCorrectoAlumno::MyFrameInicioCorrectoAlumno( wxWindow* parent, wxWi
 	m_panel_DetallesLibros->Layout();
 	bSizerContenedorAlumnos1->Fit( m_panel_DetallesLibros );
 	m_Bibliotecario_frameActual->AddPage( m_panel_DetallesLibros, wxT("a page"), false );
+	m_panel_Reservar = new wxPanel( m_Bibliotecario_frameActual, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizerContenedorAlumnos111;
+	bSizerContenedorAlumnos111 = new wxBoxSizer( wxVERTICAL );
+
+	wxBoxSizer* bSizer301;
+	bSizer301 = new wxBoxSizer( wxVERTICAL );
+
+	m_calendar1 = new wxCalendarCtrl( m_panel_Reservar, wxID_ANY, wxDefaultDateTime, wxDefaultPosition, wxDefaultSize, wxCAL_SHOW_HOLIDAYS );
+	bSizer301->Add( m_calendar1, 0, wxALL, 5 );
+
+
+	bSizerContenedorAlumnos111->Add( bSizer301, 0, wxALIGN_CENTER_HORIZONTAL, 5 );
+
+	wxBoxSizer* bSizer31;
+	bSizer31 = new wxBoxSizer( wxHORIZONTAL );
+
+	wxBoxSizer* bSizerTodosLosAlumnos111;
+	bSizerTodosLosAlumnos111 = new wxBoxSizer( wxVERTICAL );
+
+	m_list_Reservas = new wxListCtrl( m_panel_Reservar, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_REPORT );
+	bSizerTodosLosAlumnos111->Add( m_list_Reservas, 1, wxALL|wxEXPAND, 5 );
+
+
+	bSizer31->Add( bSizerTodosLosAlumnos111, 1, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizer45111;
+	bSizer45111 = new wxBoxSizer( wxVERTICAL );
+
+	m_button14111 = new wxButton( m_panel_Reservar, wxID_ANY, wxT("Eliminar"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer45111->Add( m_button14111, 0, wxALL, 5 );
+
+
+	bSizer31->Add( bSizer45111, 0, wxEXPAND, 5 );
+
+
+	bSizerContenedorAlumnos111->Add( bSizer31, 1, wxEXPAND, 5 );
+
+
+	m_panel_Reservar->SetSizer( bSizerContenedorAlumnos111 );
+	m_panel_Reservar->Layout();
+	bSizerContenedorAlumnos111->Fit( m_panel_Reservar );
+	m_Bibliotecario_frameActual->AddPage( m_panel_Reservar, wxT("a page"), false );
 	m_panel_DetallesEtiquetas = new wxPanel( m_Bibliotecario_frameActual, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizerContenedorAlumnos11;
 	bSizerContenedorAlumnos11 = new wxBoxSizer( wxHORIZONTAL );
@@ -244,6 +289,7 @@ MyFrameInicioCorrectoAlumno::MyFrameInicioCorrectoAlumno( wxWindow* parent, wxWi
 
 	this->SetSizer( bSizer3 );
 	this->Layout();
+	bSizer3->Fit( this );
 
 	this->Centre( wxBOTH );
 
@@ -251,11 +297,13 @@ MyFrameInicioCorrectoAlumno::MyFrameInicioCorrectoAlumno( wxWindow* parent, wxWi
 	Boton_Buscar_Frase->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::Onclick_Boton_Buscar_Frase ), NULL, this );
 	m_radio_Libros->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnRadioButton_CambiaPestana ), NULL, this );
 	m_radio_InfoLibros->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnRadioButton_CambiaPestana ), NULL, this );
+	m_radio_Reservar->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnRadioButton_CambiaPestana ), NULL, this );
 	m_radio_Etiquetas->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnRadioButton_CambiaPestana ), NULL, this );
 	m_radio_Alumnos->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnRadioButton_CambiaPestana ), NULL, this );
 	m_radio_Bibliotecarios->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnRadioButton_CambiaPestana ), NULL, this );
 	m_button131->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnButtonClickAgregar ), NULL, this );
 	m_button141->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnButtonClickEliminar ), NULL, this );
+	m_button14111->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnButtonClickEliminar ), NULL, this );
 	m_button1311->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnButtonClickAgregar ), NULL, this );
 	m_button1411->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnButtonClickEliminar ), NULL, this );
 	m_button13->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnButtonClickPrestarLibro ), NULL, this );
@@ -272,11 +320,13 @@ MyFrameInicioCorrectoAlumno::~MyFrameInicioCorrectoAlumno()
 	Boton_Buscar_Frase->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::Onclick_Boton_Buscar_Frase ), NULL, this );
 	m_radio_Libros->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnRadioButton_CambiaPestana ), NULL, this );
 	m_radio_InfoLibros->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnRadioButton_CambiaPestana ), NULL, this );
+	m_radio_Reservar->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnRadioButton_CambiaPestana ), NULL, this );
 	m_radio_Etiquetas->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnRadioButton_CambiaPestana ), NULL, this );
 	m_radio_Alumnos->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnRadioButton_CambiaPestana ), NULL, this );
 	m_radio_Bibliotecarios->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnRadioButton_CambiaPestana ), NULL, this );
 	m_button131->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnButtonClickAgregar ), NULL, this );
 	m_button141->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnButtonClickEliminar ), NULL, this );
+	m_button14111->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnButtonClickEliminar ), NULL, this );
 	m_button1311->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnButtonClickAgregar ), NULL, this );
 	m_button1411->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnButtonClickEliminar ), NULL, this );
 	m_button13->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnButtonClickPrestarLibro ), NULL, this );

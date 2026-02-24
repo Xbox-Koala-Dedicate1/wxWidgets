@@ -1,37 +1,25 @@
 #ifndef HISTORIAL_H
 #define HISTORIAL_H
-#include "../preConfiguracion/preConfiguracion.h"
 
-#include "../libro/libro.h"
-#include "../alumno/alumno.h"
-#include "../system/system.h"
+#include <vector>
+#include <string>
+#include <fstream>
+#include <cstring>
+using namespace std;
 
 //prestados.bin ->registro de los prestamos
-
-struct RegistroPrestamo {
-	int dniAlumno; 
-	size_t idLibro;
-	char fechaPrestamo[20];
-	char fechaDevolucion[20]; // La fecha límite que le ponemos al alumno o sino sancion 
-	bool devuelto;            // false = Lo tiene el alumno, true = Ya lo devolvió
+struct Registro{
+size_t id_libro, id_usuario;
+char nombre_usuario[49], nombre_libro[50];
+int anio,mes,dia;
 };
-
 class Historial{
-    System sistema;  
-    int IdUsuario; //puede ser alumno o bibliotecario
-    bool ingreso;
     public:
-        Historial(int x){
-        this->ingreso=false; 
-		IdUsuario=x;
-        }
-		bool AgregarNuevoRegistro(int IdBibliotecario);//trabajo del bibliotecario
-        
-		bool EliminarRegistro(int IdRegistro);
-		template<typename S>
-		bool Verificar_Existencia_Binario(int Id,string nombreArchivo);
-		template<typename S>
-        void Ver_Registro(int actual,vector<S>& v,string nombreArchivo);
-
+        Historial(){}
+		vector<Registro> Mostrar_Historial(size_t id_usuario,string nombreArchivo="Recursos/Binarios/Historial.bin");
+		vector<Registro> Mostrar_Historial_libro(size_t id_libro,string nombreArchivo="Recursos/Binarios/Historial.bin");
+		void Cargar_Historial(size_t idLibro, size_t idAlumno,string nom_usu, string nom_lib,int dia,int mes,int anio, string nombreArchivo="Recursos/Binarios/Historial.bin" );
 };
+
+
 #endif

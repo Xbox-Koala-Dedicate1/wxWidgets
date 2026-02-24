@@ -9,7 +9,7 @@ struct Tags{
 	size_t IdTag;
 	size_t VerID()const {return IdTag;}
 	char NombreTag[50];
-	size_t InicioBloque;
+//	size_t InicioBloque;
 	bool existe;
 	void Existe(){existe = true;}
 	void NoExiste(){existe = false;}
@@ -35,6 +35,8 @@ class Bloques {
 public:
 	Bloques();
 	~Bloques();
+	bool Guardar(string nombreArhivo, Bloque &A_Guardar, size_t Pos);
+	Bloque VerContenido(string nombreArchivo,size_t NroBloque);
 	Tags AgregarNuevoTag(string Nombre);
 	size_t AgregarNuevoBloque();
 	vector<size_t>LeerTodosLosElementos(size_t IdTag);

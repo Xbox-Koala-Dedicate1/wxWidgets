@@ -1,8 +1,8 @@
 #ifndef VENTANAPARAHISTORIAL_H
 #define VENTANAPARAHISTORIAL_H
 #include "wxfb_project.h"
-
-class VentanaParaHistorial : public MyFrameHistorial {
+#include "ProyBaseHistorial.h"
+class VentanaParaHistorial : public MyDialogHistorial {
 	
 private:
 	

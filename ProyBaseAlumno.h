@@ -25,6 +25,7 @@
 #include <wx/statbmp.h>
 #include <wx/panel.h>
 #include <wx/listctrl.h>
+#include <wx/calctrl.h>
 #include <wx/simplebook.h>
 #include <wx/frame.h>
 
@@ -42,6 +43,7 @@ class MyFrameInicioCorrectoAlumno : public wxFrame
 		wxButton* Boton_Buscar_Frase;
 		wxRadioButton* m_radio_Libros;
 		wxRadioButton* m_radio_InfoLibros;
+		wxRadioButton* m_radio_Reservar;
 		wxRadioButton* m_radio_Etiquetas;
 		wxRadioButton* m_radio_Alumnos;
 		wxRadioButton* m_radio_Bibliotecarios;
@@ -58,6 +60,10 @@ class MyFrameInicioCorrectoAlumno : public wxFrame
 		wxButton* m_button21;
 		wxButton* m_button201;
 		wxButton* m_button141;
+		wxPanel* m_panel_Reservar;
+		wxCalendarCtrl* m_calendar1;
+		wxListCtrl* m_list_Reservas;
+		wxButton* m_button14111;
 		wxPanel* m_panel_DetallesEtiquetas;
 		wxListCtrl* m_list_Etiquetas;
 		wxButton* m_button1311;
@@ -85,7 +91,7 @@ class MyFrameInicioCorrectoAlumno : public wxFrame
 
 	public:
 
-		MyFrameInicioCorrectoAlumno( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 580,420 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
+		MyFrameInicioCorrectoAlumno( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("ALUMNO"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
 
 		~MyFrameInicioCorrectoAlumno();
 

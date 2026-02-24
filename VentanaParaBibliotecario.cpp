@@ -1,8 +1,8 @@
 #include "VentanaParaBibliotecario.h"
-#include "wx_prestamo.h"
-#include "wx_historial2.h"
+#include "DialogoPrestamo.h"
+#include "DialogoHistorial.h"
 #include <wx/msgdlg.h>
-#include "wx_eliminar.h"
+#include "Dialogo_Eliminar.h"
 
 
 

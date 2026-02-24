@@ -2,7 +2,7 @@
 #define VENTANAPARAALUMNO_H
 #include "wxfb_project.h"
 #include "Funcionalidades/alumno/alumno.h"
-
+#include "Reservar.h"
 #include "Funcionalidades/Bloques/Bloques.h"
 #include "ProyBaseAlumno.h"
 class System;
@@ -19,6 +19,8 @@ private:
 	vector<Alumno> vAlumno; 
 	vector<Bibliotecario> vBibliotecario;
 	vector<Libro>vLibros;
+	vector<Reservar>vReservas;
+	
 protected:
 	void OnButtonClickAgregar( wxCommandEvent& event )  override;
 	void OnButtonClickEliminar( wxCommandEvent& event )  override;
@@ -30,6 +32,7 @@ protected:
 	
 	
 	void CargarListaInfoLibros(wxListCtrl* lista);
+	void CargarListaReservar(wxListCtrl* lista);
 	void CargarListaEtiquetas(wxListCtrl* lista);
 	void CargarListaAlumnos(wxListCtrl* lista);
 	void CargarListaBibliotecario(wxListCtrl* lista);

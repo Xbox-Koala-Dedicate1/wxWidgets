@@ -1,18 +1,19 @@
 #include "VentanaParaAlumno.h"
-#include "wx_prestamo.h"
-#include "wxfb_historial.h"
-#include "wx_agregar.h"
-#include "wx_eliminar.h"
+#include "DialogoReservar.h"
+#include "DialogoPrestamo.h"
+#include "DialogoHistorial.h"
+#include "DialogoAgregar.h"
+#include "Dialogo_Eliminar.h"
 #include "Funcionalidades/system/system.h"
 #include "Funcionalidades/bibliotecario/bibliotecario.h"
-#include "wx_agregarpersona.h"
+#include "DialogoAgregarPersona.h"
 
 using namespace std;
 
 VentanaParaAlumno::VentanaParaAlumno(wxWindow *parent) : MyFrameInicioCorrectoAlumno(parent) {
 	///Para crear columnas a la Tabla, en diseñador no encontre opcion
 	sistema = new System();
-	
+	this->Maximize(true);
 	///LIBRO
 	
 	m_list_InfoLibros->InsertColumn(0, "ID", wxLIST_FORMAT_LEFT, 50);
@@ -21,6 +22,12 @@ VentanaParaAlumno::VentanaParaAlumno(wxWindow *parent) : MyFrameInicioCorrectoAl
 	
 	m_list_InfoLibros->SetSingleStyle(wxLC_HRULES); // Líneas horizontales
 	m_list_InfoLibros->SetSingleStyle(wxLC_VRULES); // Líneas verticaless
+	
+	///Reservas
+	m_list_Reservas->InsertColumn(0, "ID", wxLIST_FORMAT_LEFT, 50);
+	m_list_Reservas->InsertColumn(1, "Nombre", wxLIST_FORMAT_LEFT, 200);
+	m_list_Reservas->InsertColumn(2, "Estado", wxLIST_FORMAT_LEFT, 200);
+	
 	
 	///Etiquetas
 	
@@ -35,7 +42,8 @@ VentanaParaAlumno::VentanaParaAlumno(wxWindow *parent) : MyFrameInicioCorrectoAl
 	///AlUMNO
 	m_list_Alumnos->InsertColumn(0, "ID", wxLIST_FORMAT_LEFT, 50);
 	m_list_Alumnos->InsertColumn(1, "Nombre", wxLIST_FORMAT_LEFT, 200);
-	m_list_Alumnos->InsertColumn(2, "Estado", wxLIST_FORMAT_LEFT, 100);
+	m_list_Alumnos->InsertColumn(2, "Dni", wxLIST_FORMAT_LEFT, 100);
+	m_list_Alumnos->InsertColumn(3, "Estado", wxLIST_FORMAT_LEFT, 100);
 	
 	
 	m_list_Alumnos->SetSingleStyle(wxLC_HRULES); // Líneas horizontales
@@ -44,7 +52,7 @@ VentanaParaAlumno::VentanaParaAlumno(wxWindow *parent) : MyFrameInicioCorrectoAl
 	///BIBLIOTECARIO
 	m_list_Bibliotecarios->InsertColumn(0, "ID", wxLIST_FORMAT_LEFT, 50);
 	m_list_Bibliotecarios->InsertColumn(1, "Nombre", wxLIST_FORMAT_LEFT, 200);
-	m_list_Bibliotecarios->InsertColumn(2, "DNI", wxLIST_FORMAT_LEFT, 100);
+	m_list_Bibliotecarios->InsertColumn(2, "Dni", wxLIST_FORMAT_LEFT, 100);
 	m_list_Bibliotecarios->InsertColumn(3, "Estado", wxLIST_FORMAT_LEFT, 100);
 	
 	m_list_Bibliotecarios->SetSingleStyle(wxLC_HRULES); // Líneas horizontales
@@ -75,6 +83,8 @@ void VentanaParaAlumno::CargarListaAlumnos(wxListCtrl* lista){
 		
 		///CargamosDni (Envuelto en wxString por seguridad)
 		lista->SetItem(index, 2, wxString(to_string(vAlumno[i].VerDNI())));
+		lista->SetItem(index, 3, wxString::Format("%d", (int)vAlumno[i].Existencia()) );				
+		
 	}
 	///Mostrar todo de golpe
 	lista->Thaw();	
@@ -92,11 +102,12 @@ void VentanaParaAlumno::CargarListaBibliotecario(wxListCtrl* lista){
 		///Llenamos con ID (Casteado a int)
 		long index = lista->InsertItem(i, wxString::Format("%d", (int)vBibliotecario[i].VerID()));
 		
-		///CargarNombreDelAlumno
+		///CargarNombreDel Bibliotecario
 		lista->SetItem(index, 1, vBibliotecario[i].VerNombre() );
 		
 		///CargamosDni (Envuelto en wxString)
 		lista->SetItem(index, 2, wxString(to_string(vBibliotecario[i].VerDNI())));	
+					
 	}
 	///Mostrar todo de golpe
 	lista->Thaw();
@@ -116,30 +127,53 @@ void VentanaParaAlumno::CargarListaInfoLibros(wxListCtrl* lista){
 		lista->SetItem(index, 1, vLibros[i].VerNombre() );
 		
 		///Antes estadoDisponibibldad (Casteado a int)
-		lista->SetItem(index, 2, wxString::Format("%d", (int)vLibros[i].Existencia()) );		
+		lista->SetItem(index, 2, wxString::Format("%d", (int)vLibros[i].EstadoDisponibilidad()) );		
+
 	}
 	///Mostrar todo de golpe
 	lista->Thaw();
 }
-void VentanaParaAlumno::CargarListaEtiquetas(wxListCtrl* lista){
+void VentanaParaAlumno::CargarListaReservar(wxListCtrl* lista){
 	//Limpiamos la tabla
-	lista->DeleteAllItems();
-	//¿¿
-	lista->Freeze();
-	tagsActuales = sistema->VerContenido<Tags>(sistema->etiquetas(),true);
-	for(int i=0;i<tagsActuales.size();i++) { 
-		
-		/// ID (Casteado a int)
-		long index = lista->InsertItem(i, wxString::Format("%d", (int)tagsActuales[i].IdTag));
-		
-		///Nombre	
-		lista->SetItem(index, 1, tagsActuales[i].NombreTag );
-		
-		///Existencia (Casteado a int)
-		lista->SetItem(index, 2, wxString::Format("%d", (int)tagsActuales[i].Existencia()) );			
-	}
-	///Mostrar todo de golpe
-	lista->Thaw();
+//	lista->DeleteAllItems();
+//	
+//	//
+//	lista->Freeze();
+//	
+//	vReservas = sistema->VerContenido<Reservar>(sistema->reservar(),true);
+//	for(int i=0;i<vReservas.size();i++) { 
+//		
+//		/// ID (Casteado a int)
+//		long index = lista->InsertItem(i, wxString::Format("%d", (size_t)vReservas[i].VerID()));
+//		
+//		///Nombre	
+//		lista->SetItem(index, 1, vReservas[i].VerNombre() );
+//		
+//		///Existencia (Casteado a int)
+//		lista->SetItem(index, 2, wxString::Format("%d", (int)vReservas[i].Existencia()) );			}
+//	///Mostrar todo de golpe
+//	lista->Thaw();
+}
+
+void VentanaParaAlumno::CargarListaEtiquetas(wxListCtrl* lista){
+//	//Limpiamos la tabla
+//	lista->DeleteAllItems();
+//	//¿¿
+//	lista->Freeze();
+//	tagsActuales = sistema->VerContenido<Tags>(sistema->etiquetas(),true);
+//	for(int i=0;i<tagsActuales.size();i++) { 
+//		
+//		/// ID (Casteado a int)
+//		long index = lista->InsertItem(i, wxString::Format("%d", (int)tagsActuales[i].IdTag));
+//		
+//		///Nombre	
+//		lista->SetItem(index, 1, tagsActuales[i].NombreTag );
+//		
+//		///Existencia (Casteado a int)
+//		lista->SetItem(index, 2, wxString::Format("%d", (int)tagsActuales[i].Existencia()) );			
+//	}
+//	///Mostrar todo de golpe
+//	lista->Thaw();
 }
 
 void VentanaParaAlumno::OnRadioButton_CambiaPestana(wxCommandEvent& event){
@@ -150,18 +184,23 @@ void VentanaParaAlumno::OnRadioButton_CambiaPestana(wxCommandEvent& event){
 		m_Bibliotecario_frameActual->SetSelection(1);
 		CargarListaInfoLibros(m_list_InfoLibros);
 	}
-	if(m_radio_Etiquetas->GetValue()){
+	if(m_radio_Reservar->GetValue()){
 		m_Bibliotecario_frameActual->SetSelection(2);
+		CargarListaReservar(m_list_Reservas);
+	}
+	if(m_radio_Etiquetas->GetValue()){
+		m_Bibliotecario_frameActual->SetSelection(3);
 		CargarListaEtiquetas(m_list_Etiquetas);
 	}
 	else if(m_radio_Alumnos->GetValue()){
-		m_Bibliotecario_frameActual->SetSelection(3);
+		m_Bibliotecario_frameActual->SetSelection(4);
 		CargarListaAlumnos(m_list_Alumnos);
 	}				
 	else if(m_radio_Bibliotecarios->GetValue()){
-		m_Bibliotecario_frameActual->SetSelection(4);
+		m_Bibliotecario_frameActual->SetSelection(5);
 		CargarListaBibliotecario(m_list_Bibliotecarios);
 	}
+
 	this->Layout();  ///Actualizamos al frame actual
 }
 
@@ -208,7 +247,7 @@ void VentanaParaAlumno::OnButtonClickAgregar( wxCommandEvent& event )  {
 	}
 	if(m_radio_Etiquetas->GetValue()){
 		tipo=1;
-		DialogoAgregar *nueva= new DialogoAgregar(this,sistema,admin,tipo,sistema->etiquetas());
+		DialogoAgregar *nueva= new DialogoAgregar(this,sistema,admin,tipo,"Recursos/Binarios/Tags/Tags.bin");
 		if (nueva->ShowModal() == wxID_OK){
 			CargarListaEtiquetas(m_list_Etiquetas);
 		}
@@ -245,12 +284,24 @@ void VentanaParaAlumno::OnButtonClickEliminar( wxCommandEvent& event )  {
 			}
 		}
 	}
+	else if(m_radio_Reservar->GetValue()){
+		id = m_list_Reservas->GetNextItem(-1,wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
+		
+		if(id != -1){
+			if(id >= 0 and id <= vReservas.size()){
+				Dialogo_Eliminar *nueva= new Dialogo_Eliminar(this,id,sistema,"Recursos/Binarios/reservar.bin",1,vReservas[id].VerNombre());
+				if (nueva->ShowModal() == wxID_OK){
+					CargarListaReservar(m_list_Reservas);
+				}
+			}
+		}
+	}
 	else if(m_radio_Etiquetas->GetValue()){  // <-- Agregado el 'else' aquí
 		id = m_list_Etiquetas->GetNextItem(-1,wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
 		
 		if(id != -1){
 			if(id >= 0 and id <= tagsActuales.size()){
-				Dialogo_Eliminar *nueva= new Dialogo_Eliminar(this,id,sistema,sistema->etiquetas(),1,tagsActuales[id].NombreTag);
+				Dialogo_Eliminar *nueva= new Dialogo_Eliminar(this,id,sistema,"Recursos/Binarios/Tags/Tags.bin",2,tagsActuales[id].NombreTag);
 				if (nueva->ShowModal() == wxID_OK){
 					CargarListaEtiquetas(m_list_Etiquetas);
 				}
@@ -261,7 +312,7 @@ void VentanaParaAlumno::OnButtonClickEliminar( wxCommandEvent& event )  {
 		id = m_list_Alumnos->GetNextItem(-1,wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
 		if(id != -1){
 			if(id >= 0 and id <= vAlumno.size()){
-				Dialogo_Eliminar *nueva= new Dialogo_Eliminar(this,id,sistema,sistema->alumnos(),2,vAlumno[id].VerNombre());
+				Dialogo_Eliminar *nueva= new Dialogo_Eliminar(this,id,sistema,sistema->alumnos(),3,vAlumno[id].VerNombre());
 				if (nueva->ShowModal() == wxID_OK){
 					CargarListaAlumnos(m_list_Alumnos);
 				}
@@ -273,7 +324,7 @@ void VentanaParaAlumno::OnButtonClickEliminar( wxCommandEvent& event )  {
 		
 		if(id != -1){
 			if(id >= 0 and id <= vBibliotecario.size()){
-				Dialogo_Eliminar *nueva= new Dialogo_Eliminar(this,id,sistema,sistema->bibliotecarios(),3,vBibliotecario[id].VerNombre());
+				Dialogo_Eliminar *nueva= new Dialogo_Eliminar(this,id,sistema,sistema->bibliotecarios(),4,vBibliotecario[id].VerNombre());
 				if (nueva->ShowModal() == wxID_OK){
 					CargarListaBibliotecario(m_list_Bibliotecarios);
 				}

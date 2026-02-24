@@ -81,7 +81,7 @@ class MyFrameInicioCorrectoBibliotecario : public wxFrame
 
 	public:
 
-		MyFrameInicioCorrectoBibliotecario( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 514,420 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
+		MyFrameInicioCorrectoBibliotecario( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("BIBLIOTECARIO"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 514,420 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
 
 		~MyFrameInicioCorrectoBibliotecario();
 

@@ -1,246 +1,209 @@
 #include "bibliotecario.h"
-#include "../system/system.h"
+#include "../buscador/buscador.h"
+#include "../Historial/Historial.h"
+
+
 
 using namespace std;
 
-
-
-template<typename T>
-vector<T> Bibliotecario::AgregarElementos(int Agregar,string nombreArchivo)
-{
-	vector<T> resultado;
-	string nombre = "";
-	size_t dni;
-	int idElemento = sistema->VerUltimo<T>(nombreArchivo);
-	
-	while (Agregar > 0)
-	{
-		cout << "Nombre: ";cin>>nombre;		
-		cout<<"Dni: ";cin>>dni;
-		
-		
-		/// Generar ID
-		++idElemento;
-		T aux(idElemento, nombre.c_str(),dni);
-		resultado.push_back(aux);
-		--Agregar;
-		cout<<endl<<"DesdeAgregarElementos"<<endl;
-		cout<<"Nombre del nuevo: "<<aux.VerNombre()<<endl;
-	}
-	return resultado;
+// --- FUNCI�N CROSS-PLATFORM ---
+void Bibliotecario::LimpiarPantalla() {
+#ifdef _WIN32
+	system("cls");
+#else
+	system("clear");
+#endif
 }
+// ------------------------------
 
-vector<Libro> Bibliotecario::AgregarElementos(int Agregar,string nombreArchivo)
-{
+
+
+vector<Libro> Bibliotecario::AgregarElementos(int Agregar, string nombreArchivo, System& sys){
 	vector<Libro> resultado;
-	string nombre = "";
-	int idElemento = sistema->VerUltimo<Libro>(nombreArchivo);
+	Buscador x;
+	string nombre = "", autor = "";
+	int idElemento = sys.VerUltimo<Libro>(nombreArchivo);
 	while (Agregar > 0)
 	{
-		cout << "Nombre: ";cin>>nombre;		
-		
-				/// Generar ID
-		++idElemento;
-		Libro aux(idElemento, nombre.c_str());
-		resultado.push_back(aux);
-		--Agregar;
-		cout<<endl<<"DesdeAgregarElementosLibro"<<endl;
-		cout<<"Nombre del nuevo: "<<aux.VerNombre()<<endl;
-	
+		cout << "Nombre: "; cin >> nombre;     
+		cout << "Autor: "; cin >> autor; 
+		//validacion que no ingresen dos veces lo mismo
+		if(x.Busqueda_Autor(autor,resultado).size()==0){
+			++idElemento;
+			Libro aux(idElemento, nombre.c_str(),autor.c_str());
+			resultado.push_back(aux);
+			--Agregar;
+			cout << endl << "Libro agregado: " << aux.VerNombre() <<" / Autor: "<<aux.VerAutor()<<"/ ID:"<<idElemento<<endl;
+		}else{
+			cout<<"No se puede ingresar un libro y un autor dos veces"<<endl;
+		}
 	}
 	return resultado;
 }
 
-void Bibliotecario::EliminarLibro(vector<Libro>::const_iterator Eliminar, vector<Libro> &Libros)
-{
+void Bibliotecario::EliminarLibro(vector<Libro>::const_iterator Eliminar, vector<Libro> &Libros){
 	Libros.erase(Eliminar);
 }
 
-
-
-// En bibliotecario.cpp
-
-bool Bibliotecario::PrestarLibros(size_t idLibro, size_t idAlumno, vector<Libro> &Libros, vector<Alumno> &Alumnos,vector<int>Id_Prestamos, int dia, int mes, int anio)
-{
-	// 1. Buscar si el alumno por ID si existe
-	///No esta siendo usado
-	/*auto itAlumno = find_if(Alumnos.begin(), Alumnos.end(), [idAlumno](const Alumno& a) {
-			return a.VerID() == idAlumno;
-		});
-	*/
-	if(idLibro>Alumnos.size()){
-			cout<<"C�digo de libro inexistente, Libro no encontrado." << endl;
-			return false; //no existe el libro o est� prestado
-		}
-	//verificar si el alumno no esta sancionado
-		
+bool Bibliotecario::PrestarLibros(size_t idLibro, size_t idAlumno, vector<Libro> &Libros, vector<Alumno> &Alumnos, vector<Libros_en_Prestamo>& Prestamos, int dia, int mes, int anio){
+	if(idLibro > Libros.size()){
+		cout << "Codigo de libro inexistente." << endl;
+		return false;
+	}
 	
-		// 1. Buscar el libro por ID si existe
-		auto itlibro = find_if(Libros.begin(), Libros.end(), [idLibro](const Libro& a) {
-			return a.VerID() == idLibro;
+
+	auto itlibro = find_if(Libros.begin(), Libros.end(), [idLibro](const Libro& a) {
+		return a.VerID() == idLibro;
+	});
+	
+	auto itAlumno = find_if(Alumnos.begin(), Alumnos.end(), [idAlumno](const Alumno& b) {
+		return b.VerID() == idAlumno;
+	});
+
+	if (itAlumno != Alumnos.end() && Alumno_quiere_un_libro(*itAlumno)) {
+		return false;
+	}
+
+	if (itlibro != Libros.end()) {
+		if (itlibro->EstadoDisponibilidad()) {
+			itlibro->SetDisponible(false); 
+			int diasCalculados = CalcularDiferenciaDias(dia, mes, anio);
+			itlibro->DiasRestantes(diasCalculados);
+			cout << "Libro prestado exitosamente. Dias: " << diasCalculados << endl;
+			AgregarLibroPrestado(idLibro, idAlumno, dia, mes, anio, Prestamos);
+			
+			string nom_usu= itAlumno->VerNombre();
+			string nom_lib= itlibro->VerNombre();
+			Historial h;
+			h.Cargar_Historial(idLibro,idAlumno,nom_usu,nom_lib,dia,mes,anio);
+			
+			return true;
+		} else {
+			cout << "El libro ya se encuentra prestado." << endl;
+			return false; 
+		}
+	}
+	cout << "Libro no encontrado." << endl;
+	return false;
+}
+
+void Bibliotecario::AgregarLibroPrestado(size_t id_LibroPrestado,size_t id_AlumnoPrestado, int dia, int mes, int anio, vector<Libros_en_Prestamo>& Prestamos){
+	Libros_en_Prestamo aux;
+	aux.id_Libro = id_LibroPrestado;
+	aux.id_Alumno = id_AlumnoPrestado;
+	aux.dia_Devolucion = dia;
+	aux.mes_Devolucion = mes;
+	aux.anio_Devolucion = anio;
+
+	// Calcular el último id_Prestamo en el vector (0 si está vacío)
+	size_t ultimoId = 0;
+	if (!Prestamos.empty()) {
+		auto it = std::max_element(Prestamos.begin(), Prestamos.end(), [](const Libros_en_Prestamo &a, const Libros_en_Prestamo &b){
+			return a.id_Prestamo < b.id_Prestamo;
 		});
-		
-		if(idLibro>Libros.size()){
-			cout<<"C�digo de libro inexistente, Libro no encontrado." << endl;
-			return false; //no existe el libro o est� prestado
-		}
-		
-		// 2. Verificar si existe
-		if (itlibro != Libros.end()) {
-			// 3. Verificar disponibilidad
-			if (itlibro->EstadoDisponibilidad()) {
-				
-				// Marcar como NO disponible
-				itlibro->SetDisponible(false); 
-				
-				// Calcular días restantes hasta la fecha dada
-				int diasCalculados = CalcularDiferenciaDias(dia, mes, anio);
+		ultimoId = it->id_Prestamo;
+	}
+	aux.id_Prestamo = ultimoId + 1;
 
-				// Asignar los días al libro
-				itlibro->DiasRestantes(diasCalculados);
-				
-				cout << "Libro prestado exitosamente. Dias para devolucion: " << diasCalculados << endl;
-				AgregarLibroPrestado(idLibro,Id_Prestamos);
-				return true;
-				
-			} else {
-				cout << "El libro ya se encuentra prestado." << endl;
-				return false; 
-			}
-		}
-    
-    cout << "Libro no encontrado." << endl;
-    return false;
-}
-void Bibliotecario::AgregarLibroPrestado(int libro_prestado,vector<int>Id_Prestamos){}
-///Usar sistema.Agregar<Tipo>(...); + sistema.Guardar(...) o EscribirEnBin()
-/*void Bibliotecario::AgregarLibroPrestado(int libro_prestado){
-	Id_Prestamos.push_back(libro_prestado);
-}
-*/
-bool Bibliotecario:: Devolucion_libro(size_t idLibro,vector<int>Id_Prestamos){
-	// 1. Buscar el libro por ID si existe
-		///Usar sistema.VerUltimo
-		if(idLibro>Id_Prestamos.size()){
-			cout<<"C�digo de libro inexistente, Libro no encontrado." << endl;			
-		}else{
-			auto itlibro = find(Id_Prestamos.begin(), Id_Prestamos.end(), idLibro);
-			if(itlibro !=Id_Prestamos.end()){
-				return true;
-			}
-		}
-return false;
-		
-
+	Prestamos.push_back(aux);
 }
 
-bool Bibliotecario:: Alumno_quiere_un_libro(Alumno &x){
-	//averiguamos si esta limpio y no esta sancionado
+bool Bibliotecario::Devolucion_libro(size_t idLibro, size_t /*idAlumno*/, vector<Libro> &Libros, vector<Alumno> &/*Alumnos*/, vector<Libros_en_Prestamo>& Prestamos, int /*dia_Devolucion*/, int /*mes_Devolucion*/, int /*anio_Devolucion*/){
+	//queda marcado alumnos, dia, mes, año para implementar en la funcion historial
+	// Buscar el préstamo correspondiente al libro y eliminarlo del vector Prestamos
+	auto itPrestamo = find_if(Prestamos.begin(), Prestamos.end(), [idLibro](const Libros_en_Prestamo &p){
+		return p.id_Libro == idLibro;
+	});
+
+	if (itPrestamo == Prestamos.end()) {
+		cout << "Prestamo para ese libro no encontrado." << endl;
+		return false;
+	}
+
+	Prestamos.erase(itPrestamo);
+
+	// Marcar el libro correspondiente como disponible si existe en el vector Libros
+	auto itLibro = find_if(Libros.begin(), Libros.end(), [idLibro](const Libro &l){
+		return l.VerID() == idLibro;
+	});
+
+	if (itLibro != Libros.end()) {
+		itLibro->SetDisponible(true);
+		itLibro->DiasRestantes(0);
+	}
+
+	cout << "Devolucion realizada y prestamo eliminado." << endl;
+	return true;
+}
+
+bool Bibliotecario::Alumno_quiere_un_libro(Alumno &x){
 	return x.VerEstadoDeSancion();
 }
 
-
 int Bibliotecario::CalcularDiferenciaDias(int dia, int mes, int anio){
-	// 1. Obtener fecha actual
 	time_t t = time(0);
 	struct tm * now = localtime(&t);
 	
-	// 2. Configurar fecha de devoluci?n (struct tm)
 	struct tm fechaDevolucion = {0};
-	fechaDevolucion.tm_year = anio - 1900; // Los a?os en tm cuentan desde 1900
-	fechaDevolucion.tm_mon = mes - 1;      // Los meses van de 0 a 11
+	fechaDevolucion.tm_year = anio - 1900; 
+	fechaDevolucion.tm_mon = mes - 1;      
 	fechaDevolucion.tm_mday = dia;
 	
-	// 3. Convertir ambas a tiempo en segundos
 	time_t fechaActualSec = mktime(now);
 	time_t fechaDevSec = mktime(&fechaDevolucion);
 	
-	// 4. Calcular diferencia en segundos y convertir a d?as
 	double seconds = difftime(fechaDevSec, fechaActualSec);
 	int dias = static_cast<int>(seconds / (60 * 60 * 24));
 	
-	return dias > 0 ? dias : 0; // Evitar d?as negativos si la fecha ya pas?
+	return dias > 0 ? dias : 0; 
+}
+
+bool Bibliotecario::Sancion(int IdAlumno, string nombreArchivo, bool decision, System& sys){
+	fstream archi(nombreArchivo, ios::binary|ios::out|ios::in);
+	if (!archi) return false;
+	
+	Alumno t;
+	archi.seekg((IdAlumno - 1) * (sizeof(Alumno))); 
+	archi.read(reinterpret_cast<char *>(&t), sizeof(Alumno));
+	
+	t.Sancionar(decision);
+	
+	archi.seekp((IdAlumno - 1) * sizeof(Alumno));
+	archi.write(reinterpret_cast<const char*>(&t), sizeof(Alumno));
+	return true; 
 }
 
 
-bool Bibliotecario::Sancionar(int IdAlumno, string nombreArchivo, bool decision)
-{
-	string a= "ab";
-	int ultimoID = sistema->template VerUltimo<Alumno>(a);
-	if (IdAlumno > ultimoID){
-		cout << "DNI inexistente, Alumno no encontrado." << endl;
-		return false;
-	}
-	else{
-		fstream archi(nombreArchivo, ios::binary|ios::out|ios::in);
-		if (!archi)
-			throw runtime_error("Error al Recuperar de " + nombreArchivo);
-		Alumno t;
-		archi.seekg((IdAlumno) * (sizeof(Alumno))); // vamos a la posicion
-		archi.read(reinterpret_cast<char *>(&t), sizeof(Alumno));
-		// cursor al final del alumno
-		// Debe volver asi escribir libro actualizado 
-		t.Sancionar(decision);//se cambia; bool  sancion = true, se sancionó
-		
-		archi.seekg((-1)*sizeof(Alumno));
-        archi.write(reinterpret_cast<const char*>(&t),sizeof(Alumno));
-     	return true; //alumno sancionado
-	}
-}
-bool Bibliotecario::Actualizar_Disponibilidad( int idLibro, string nombreArchivo, bool decision){
-	string a = "ab";
-	//int ultimoID = sistema.VerUltimo<Bibliotecario>(a);
-	int ultimoID =0;
-	if (idLibro > ultimoID){
-		cout << "Id inexistente, Libro no encontrado." << endl;
-		return false;
-	}
-	else{
-		fstream archi(nombreArchivo, ios::binary|ios::out|ios::in);
-		if (!archi)
-			throw runtime_error("Error al Recuperar de " + nombreArchivo);
-		
-		Libro t;
-		archi.seekg((idLibro) * (sizeof(Libro))); // vamos a la posicion
-		archi.read(reinterpret_cast<char *>(&t), sizeof(Libro));
-		// Debe volver al principio del libro para actualizarlo  
-		t.CambiarEstado(decision);//se cambia la disponibilidad del libro;
-		
-		archi.seekg((-1)*sizeof(Libro));
-        archi.write(reinterpret_cast<const char*>(&t),sizeof(Libro));
-     	return true; //Libro Disponible
-	}
+bool Bibliotecario::Actualizar_Disponibilidad(int idLibro, string nombreArchivo, bool decision, System& sys){
+	fstream archi(nombreArchivo, ios::binary|ios::out|ios::in);
+	if (!archi) return false;
+	
+	Libro t;
+	archi.seekg((idLibro - 1) * (sizeof(Libro))); 
+	archi.read(reinterpret_cast<char *>(&t), sizeof(Libro));
+	
+	t.SetDisponible(decision); 
+	if(decision) t.CambiarEstado(false); 
+	
+	archi.seekp((idLibro - 1) * sizeof(Libro));
+	archi.write(reinterpret_cast<const char*>(&t), sizeof(Libro));
+	return true; 
 }
 
-template<typename T>
-void Bibliotecario::CargarNuevos(int cant,string nombreArchivo){
-	
-	vector<T> Agregados= AgregarElementos<T>(cant,nombreArchivo);
-	
-	for(T&x : Agregados)
-		cout<<x.VerNombre()<<"    "<<x.VerDNI()<<endl;
-	char confirmar;
-	cout<<"Confirmar?: s/n ";cin>>confirmar;
-	system("cls");
-	if(confirmar == 's'){
-		sistema->Guardar<T>(nombreArchivo,Agregados);
-	}
-}
-void Bibliotecario::CargarNuevosLibros(int cant,string nombreArchivo){
-	
-	vector<Libro> Agregados= AgregarElementos(cant,nombreArchivo);
-	
+
+
+void Bibliotecario::CargarNuevosLibros(int cant, string nombreArchivo, System& sys){
+	vector<Libro> Agregados = AgregarElementos(cant, nombreArchivo, sys);
 	for(Libro&x : Agregados)
-		cout<<x.VerNombre()<<"    "<<x.VerID()<<endl;
+		cout << x.VerNombre() << "    " << x.VerID() << endl;
+	
 	char confirmar;
-	cout<<"Confirmar?: s/n ";cin>>confirmar;
-	system("cls");
+	cout << "Confirmar? (s/n): "; cin >> confirmar;
+	LimpiarPantalla(); // Usa la funci�n compatible
+	
 	if(confirmar == 's'){
-		sistema->Guardar<Libro>(nombreArchivo,Agregados);
+		sys.Guardar<Libro>(nombreArchivo, Agregados, false);
 	}
 }
-template void Bibliotecario::CargarNuevos<Bibliotecario>(int cant,string nombreArchivo);
-template void Bibliotecario::CargarNuevos<Alumno>(int cant,string nombreArchivo);
 
-template vector<Alumno> Bibliotecario::AgregarElementos(int Agregar,string nombreArchivo);
-template vector<Bibliotecario> Bibliotecario::AgregarElementos(int Agregar,string nombreArchivo);
+
