@@ -1,9 +1,9 @@
 #ifndef PERSONA_H  // 1. Si no est� definido PERSONA_H
 #define PERSONA_H
-#include <cstring>
 #include <vector>
 #include <fstream>
 #include "../libro/libro.h"
+#include <cstring>
 
 
 using namespace std;
@@ -12,11 +12,11 @@ class Persona{
 	size_t id, DNI;
 	char nombre[49]; 
 public:
-	Persona(){}
+	Persona(){
+	}
 	Persona(size_t id, const char *nombre,size_t DNI){
 		this->id = id;
 		this->DNI = DNI;
-		
 		strncpy(this->nombre, nombre, 49);
 		this->nombre[49] = '\0';
 	}
@@ -24,8 +24,8 @@ public:
 		int VerDNI() const;
 		const char *VerNombre() const;
 		void CambiarNombre(const char *NuevoNombre);
-		void Cambiar_Id( size_t nuevo_id);
-		
+		void Cambiar_Id( int nuevo_id);
 		vector<Libro> VerLibros(string nombreArchivo,bool crear=false);//usan tanto el Bibliotecario como el Alumno
+		bool ReservarLibro();
 };
 #endif // 3. Fin de la condici�n

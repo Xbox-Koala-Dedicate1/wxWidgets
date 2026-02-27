@@ -63,40 +63,9 @@ MyFrameInicioCorrectoAlumno::MyFrameInicioCorrectoAlumno( wxWindow* parent, wxWi
 	bSizerContenedorLibros = new wxBoxSizer( wxVERTICAL );
 
 	m_Bibliotecario_frameActual = new wxSimplebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	m_panel_Bibliotecario_Libros = new wxPanel( m_Bibliotecario_frameActual, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	wxBoxSizer* bSizerLibro;
+	m_panel_Bibliotecario_Libros = new wxScrolledWindow( m_Bibliotecario_frameActual, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHSCROLL|wxVSCROLL );
+	m_panel_Bibliotecario_Libros->SetScrollRate( 5, 5 );
 	bSizerLibro = new wxBoxSizer( wxVERTICAL );
-
-	wxBoxSizer* bSizer30;
-	bSizer30 = new wxBoxSizer( wxVERTICAL );
-
-	m_staticText4 = new wxStaticText( m_panel_Bibliotecario_Libros, wxID_ANY, wxT("Don Quijote de la Mancha"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText4->Wrap( -1 );
-	bSizer30->Add( m_staticText4, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
-
-	m_bitmap2 = new wxStaticBitmap( m_panel_Bibliotecario_Libros, wxID_ANY, wxBitmap( wxT("Recursos/img/quijote_mancha.jpg"), wxBITMAP_TYPE_ANY ), wxDefaultPosition, wxDefaultSize, 0 );
-	m_bitmap2->SetMaxSize( wxSize( 200,200 ) );
-
-	bSizer30->Add( m_bitmap2, 1, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
-
-
-	bSizerLibro->Add( bSizer30, 1, wxEXPAND, 5 );
-
-	wxBoxSizer* bSizerPaginador;
-	bSizerPaginador = new wxBoxSizer( wxHORIZONTAL );
-
-	m_button19 = new wxButton( m_panel_Bibliotecario_Libros, wxID_ANY, wxT("Anterior"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerPaginador->Add( m_button19, 0, wxALL, 5 );
-
-	m_staticText18 = new wxStaticText( m_panel_Bibliotecario_Libros, wxID_ANY, wxT("1 de 5"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText18->Wrap( -1 );
-	bSizerPaginador->Add( m_staticText18, 0, wxALIGN_CENTER_VERTICAL, 5 );
-
-	m_button20 = new wxButton( m_panel_Bibliotecario_Libros, wxID_ANY, wxT("Siguiente"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerPaginador->Add( m_button20, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
-
-
-	bSizerLibro->Add( bSizerPaginador, 0, wxALIGN_CENTER_HORIZONTAL, 5 );
 
 
 	m_panel_Bibliotecario_Libros->SetSizer( bSizerLibro );
@@ -111,7 +80,7 @@ MyFrameInicioCorrectoAlumno::MyFrameInicioCorrectoAlumno( wxWindow* parent, wxWi
 	bSizerTodosLosAlumnos1 = new wxBoxSizer( wxVERTICAL );
 
 	m_list_InfoLibros = new wxListCtrl( m_panel_DetallesLibros, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_REPORT );
-	bSizerTodosLosAlumnos1->Add( m_list_InfoLibros, 1, wxALL, 5 );
+	bSizerTodosLosAlumnos1->Add( m_list_InfoLibros, 1, wxALL|wxEXPAND, 5 );
 
 
 	bSizerContenedorAlumnos1->Add( bSizerTodosLosAlumnos1, 1, wxEXPAND, 5 );
@@ -189,7 +158,7 @@ MyFrameInicioCorrectoAlumno::MyFrameInicioCorrectoAlumno( wxWindow* parent, wxWi
 	bSizerTodosLosAlumnos11 = new wxBoxSizer( wxVERTICAL );
 
 	m_list_Etiquetas = new wxListCtrl( m_panel_DetallesEtiquetas, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_REPORT );
-	bSizerTodosLosAlumnos11->Add( m_list_Etiquetas, 1, wxALL, 5 );
+	bSizerTodosLosAlumnos11->Add( m_list_Etiquetas, 1, wxALL|wxEXPAND, 5 );
 
 
 	bSizerContenedorAlumnos11->Add( bSizerTodosLosAlumnos11, 1, wxEXPAND, 5 );
@@ -219,7 +188,7 @@ MyFrameInicioCorrectoAlumno::MyFrameInicioCorrectoAlumno( wxWindow* parent, wxWi
 	bSizerTodosLosAlumnos = new wxBoxSizer( wxVERTICAL );
 
 	m_list_Alumnos = new wxListCtrl( m_panel_Alumnos, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_REPORT );
-	bSizerTodosLosAlumnos->Add( m_list_Alumnos, 1, wxALL, 5 );
+	bSizerTodosLosAlumnos->Add( m_list_Alumnos, 1, wxALL|wxEXPAND, 5 );
 
 
 	bSizerContenedorAlumnos->Add( bSizerTodosLosAlumnos, 1, wxEXPAND, 5 );
@@ -302,11 +271,13 @@ MyFrameInicioCorrectoAlumno::MyFrameInicioCorrectoAlumno( wxWindow* parent, wxWi
 	m_radio_Alumnos->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnRadioButton_CambiaPestana ), NULL, this );
 	m_radio_Bibliotecarios->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnRadioButton_CambiaPestana ), NULL, this );
 	m_button131->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnButtonClickAgregar ), NULL, this );
+	m_button201->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnButtonClickHistorialLibro ), NULL, this );
 	m_button141->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnButtonClickEliminar ), NULL, this );
 	m_button14111->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnButtonClickEliminar ), NULL, this );
 	m_button1311->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnButtonClickAgregar ), NULL, this );
 	m_button1411->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnButtonClickEliminar ), NULL, this );
 	m_button13->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnButtonClickPrestarLibro ), NULL, this );
+	m_button17->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnButtonClickDevolucionLibro ), NULL, this );
 	m_button142->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnButtonClickAgregar ), NULL, this );
 	m_button14->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnButtonClickHistorialAlumno ), NULL, this );
 	m_button15->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnButtonClickEliminar ), NULL, this );
@@ -325,11 +296,13 @@ MyFrameInicioCorrectoAlumno::~MyFrameInicioCorrectoAlumno()
 	m_radio_Alumnos->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnRadioButton_CambiaPestana ), NULL, this );
 	m_radio_Bibliotecarios->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnRadioButton_CambiaPestana ), NULL, this );
 	m_button131->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnButtonClickAgregar ), NULL, this );
+	m_button201->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnButtonClickHistorialLibro ), NULL, this );
 	m_button141->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnButtonClickEliminar ), NULL, this );
 	m_button14111->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnButtonClickEliminar ), NULL, this );
 	m_button1311->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnButtonClickAgregar ), NULL, this );
 	m_button1411->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnButtonClickEliminar ), NULL, this );
 	m_button13->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnButtonClickPrestarLibro ), NULL, this );
+	m_button17->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnButtonClickDevolucionLibro ), NULL, this );
 	m_button142->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnButtonClickAgregar ), NULL, this );
 	m_button14->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnButtonClickHistorialAlumno ), NULL, this );
 	m_button15->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrameInicioCorrectoAlumno::OnButtonClickEliminar ), NULL, this );

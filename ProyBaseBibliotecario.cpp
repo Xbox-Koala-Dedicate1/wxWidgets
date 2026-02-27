@@ -107,8 +107,8 @@ MyFrameInicioCorrectoBibliotecario::MyFrameInicioCorrectoBibliotecario( wxWindow
 	wxBoxSizer* bSizerTodosLosAlumnos1;
 	bSizerTodosLosAlumnos1 = new wxBoxSizer( wxVERTICAL );
 
-	m_list_Alumnos1 = new wxListCtrl( m_panel_DetallesLibros, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_REPORT );
-	bSizerTodosLosAlumnos1->Add( m_list_Alumnos1, 1, wxALL, 5 );
+	m_list_libros = new wxListCtrl( m_panel_DetallesLibros, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_REPORT );
+	bSizerTodosLosAlumnos1->Add( m_list_libros, 1, wxALL, 5 );
 
 
 	bSizerContenedorAlumnos1->Add( bSizerTodosLosAlumnos1, 1, wxEXPAND, 5 );
@@ -124,6 +124,9 @@ MyFrameInicioCorrectoBibliotecario::MyFrameInicioCorrectoBibliotecario( wxWindow
 
 	m_button201 = new wxButton( m_panel_DetallesLibros, wxID_ANY, wxT("Lectores"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer451->Add( m_button201, 0, wxALL, 5 );
+
+	m_button16 = new wxButton( m_panel_DetallesLibros, wxID_ANY, wxT("Historial"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer451->Add( m_button16, 0, wxALL, 5 );
 
 	m_button141 = new wxButton( m_panel_DetallesLibros, wxID_ANY, wxT("Eliminar"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer451->Add( m_button141, 0, wxALL, 5 );
@@ -190,6 +193,12 @@ MyFrameInicioCorrectoBibliotecario::MyFrameInicioCorrectoBibliotecario( wxWindow
 
 	m_button14 = new wxButton( m_panel_Alumnos, wxID_ANY, wxT("Historial"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer45->Add( m_button14, 0, wxALL, 5 );
+
+	m_button142 = new wxButton( m_panel_Alumnos, wxID_ANY, wxT("Eliminar"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer45->Add( m_button142, 0, wxALL, 5 );
+
+	m_button15 = new wxButton( m_panel_Alumnos, wxID_ANY, wxT("Devolucion"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer45->Add( m_button15, 0, wxALL, 5 );
 
 
 	bSizerContenedorAlumnos->Add( bSizer45, 0, wxEXPAND, 5 );

@@ -4,9 +4,6 @@
 #include <vector>
 #include "../libro/libro.h"
 #include "../Bloques/Bloques.h"
-#include "../system/system.h"
-#include <algorithm>
-#include "../bibliotecario/bibliotecario.h"
 
 using namespace std;
 
@@ -24,15 +21,12 @@ public:
 	vector<size_t> BusquedaSimple(string nombreBuscado);
 	vector<size_t> BusquedaAmpliada(string nombreBuscado);
 	vector<string> ExtraerPalabras(string nombreBuscado);
-		
+	
 	vector<size_t> OrdenarAscendente(vector<size_t>v);
 	template <typename T>
 	vector<T> Relacionados(string palabraBuscada, vector<T>&v);
-	vector<Libro> Busqueda_Autor(string autorBuscado, vector<Libro>&v);
 	vector<size_t> ResultadoBusqueda(vector<size_t>&All_IDs);
 };
-
-
 template <typename T>
 vector<T>Buscador:: Relacionados(string palabraBuscada, vector<T>&v){
 	vector<T> aux;
@@ -45,10 +39,9 @@ vector<T>Buscador:: Relacionados(string palabraBuscada, vector<T>&v){
 		});
 		if(encontrado== v.end()){break;}
 		
-		aux.push_back(*encontrado);
+		aux.push_back(*encontrado);//Devuelve posiciones
 		pos=(encontrado-v.begin())+1;
 	}
 	return aux;
 }
-
 #endif

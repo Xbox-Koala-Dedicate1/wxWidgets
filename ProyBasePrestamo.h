@@ -17,6 +17,8 @@
 #include <wx/settings.h>
 #include <wx/sizer.h>
 #include <wx/stattext.h>
+#include <wx/datectrl.h>
+#include <wx/dateevt.h>
 #include <wx/textctrl.h>
 #include <wx/dataview.h>
 #include <wx/button.h>
@@ -38,7 +40,7 @@ class MyDialogPrestamo : public wxDialog
 	protected:
 		wxRadioButton* m_radioBtn7;
 		wxStaticText* m_staticText10;
-		wxTextCtrl* m_textCtrl5;
+		wxDatePickerCtrl* m_datePickerDevolucion;
 		wxStaticText* m_staticPrestar_NombreAlumno;
 		wxStaticText* m_staticPrestar_NombreAlumno_Valor;
 		wxStaticText* m_staticPrestar_DniAlumno;
@@ -52,6 +54,7 @@ class MyDialogPrestamo : public wxDialog
 		wxGrid* m_gridHistorial;
 
 		// Virtual event handlers, override them in your derived class
+		virtual void OnFechaDevolucionChanged( wxDateEvent& event ) { event.Skip(); }
 		virtual void OnBuscarLibro( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnConfirmarPrestamoClick( wxCommandEvent& event ) { event.Skip(); }
 

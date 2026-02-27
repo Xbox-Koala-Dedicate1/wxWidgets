@@ -23,7 +23,7 @@ MyDialogPrestamo::MyDialogPrestamo( wxWindow* parent, wxWindowID id, const wxStr
 	bSizer35 = new wxBoxSizer( wxHORIZONTAL );
 
 	m_radioBtn7 = new wxRadioButton( this, wxID_ANY, wxT("Sancionado"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer35->Add( m_radioBtn7, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	bSizer35->Add( m_radioBtn7, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 
 	bSizerCabeceraPrestarLibro->Add( bSizer35, 1, wxEXPAND, 5 );
@@ -31,12 +31,12 @@ MyDialogPrestamo::MyDialogPrestamo( wxWindow* parent, wxWindowID id, const wxStr
 	wxBoxSizer* bSizer36;
 	bSizer36 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_staticText10 = new wxStaticText( this, wxID_ANY, wxT("Dias Restantes: "), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText10 = new wxStaticText( this, wxID_ANY, wxT("Seleccionar Fecha Devolucion"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText10->Wrap( -1 );
-	bSizer36->Add( m_staticText10, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	bSizer36->Add( m_staticText10, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	m_textCtrl5 = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer36->Add( m_textCtrl5, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	m_datePickerDevolucion = new wxDatePickerCtrl( this, wxID_ANY, wxDefaultDateTime, wxDefaultPosition, wxDefaultSize, wxDP_DEFAULT|wxDP_DROPDOWN );
+	bSizer36->Add( m_datePickerDevolucion, 0, wxALL, 5 );
 
 
 	bSizerCabeceraPrestarLibro->Add( bSizer36, 0, wxEXPAND, 5 );
@@ -97,8 +97,8 @@ MyDialogPrestamo::MyDialogPrestamo( wxWindow* parent, wxWindowID id, const wxStr
 	m_staticText9->Wrap( -1 );
 	bSizer63->Add( m_staticText9, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_txtBuscarLibro = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer63->Add( m_txtBuscarLibro, 1, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	m_txtBuscarLibro = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
+	bSizer63->Add( m_txtBuscarLibro, 1, wxALL|wxEXPAND, 5 );
 
 
 	bSizer61->Add( bSizer63, 0, wxEXPAND, 5 );
@@ -111,7 +111,7 @@ MyDialogPrestamo::MyDialogPrestamo( wxWindow* parent, wxWindowID id, const wxStr
 	bSizer17->Add( m_staticText8, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_listaResultadosLibros = new wxDataViewListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxDV_ROW_LINES );
-	bSizer17->Add( m_listaResultadosLibros, 1, wxALL, 5 );
+	bSizer17->Add( m_listaResultadosLibros, 1, wxALL|wxEXPAND, 5 );
 
 
 	bSizer61->Add( bSizer17, 1, wxEXPAND, 5 );
@@ -185,10 +185,10 @@ MyDialogPrestamo::MyDialogPrestamo( wxWindow* parent, wxWindowID id, const wxStr
 
 	// Cell Defaults
 	m_gridHistorial->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
-	bSizerListaPrestamosAnteriores->Add( m_gridHistorial, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL, 5 );
+	bSizerListaPrestamosAnteriores->Add( m_gridHistorial, 1, wxALL|wxEXPAND, 5 );
 
 
-	bSizer64->Add( bSizerListaPrestamosAnteriores, 1, wxEXPAND, 5 );
+	bSizer64->Add( bSizerListaPrestamosAnteriores, 1, wxALL|wxEXPAND, 5 );
 
 
 	bSizer46->Add( bSizer64, 1, wxEXPAND, 5 );
@@ -200,6 +200,7 @@ MyDialogPrestamo::MyDialogPrestamo( wxWindow* parent, wxWindowID id, const wxStr
 	this->Centre( wxBOTH );
 
 	// Connect Events
+	m_datePickerDevolucion->Connect( wxEVT_DATE_CHANGED, wxDateEventHandler( MyDialogPrestamo::OnFechaDevolucionChanged ), NULL, this );
 	m_txtBuscarLibro->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( MyDialogPrestamo::OnBuscarLibro ), NULL, this );
 	m_btnConfirmar->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyDialogPrestamo::OnConfirmarPrestamoClick ), NULL, this );
 }
@@ -207,6 +208,7 @@ MyDialogPrestamo::MyDialogPrestamo( wxWindow* parent, wxWindowID id, const wxStr
 MyDialogPrestamo::~MyDialogPrestamo()
 {
 	// Disconnect Events
+	m_datePickerDevolucion->Disconnect( wxEVT_DATE_CHANGED, wxDateEventHandler( MyDialogPrestamo::OnFechaDevolucionChanged ), NULL, this );
 	m_txtBuscarLibro->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( MyDialogPrestamo::OnBuscarLibro ), NULL, this );
 	m_btnConfirmar->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyDialogPrestamo::OnConfirmarPrestamoClick ), NULL, this );
 

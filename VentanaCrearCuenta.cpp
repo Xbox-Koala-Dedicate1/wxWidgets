@@ -3,7 +3,6 @@
 #include "VentanaLogin.h"
 #include "VentanaParaAlumno.h"
 #include "Funcionalidades/system/system.h"
-#include "Funcionalidades/alumno/alumno.h"
 
 VentanaCrearCuenta::VentanaCrearCuenta(wxWindow *parent) : MyFrameCrearCuenta(parent) {
 	
@@ -33,7 +32,7 @@ void VentanaCrearCuenta::OnclikBienvenido_Iniciar( wxCommandEvent& event )  {
 	///Construir el alumno
 	System sistema;
 	Alumno aux(sistema.VerUltimo<Alumno>(sistema.alumnos())+1,m_text_CrearCuenta_campo1->GetValue().ToStdString().c_str(),static_cast<int>(dni));
-	sistema.VerUltimo<Alumno>(sistema.alumnos());
+	sistema.AlUltimo<Alumno>(sistema.alumnos(),aux);
 
 	
 	VentanaParaAlumno *ventanaAlum = new VentanaParaAlumno(NULL);

@@ -21,10 +21,9 @@
 #include <wx/icon.h>
 #include <wx/sizer.h>
 #include <wx/radiobut.h>
-#include <wx/stattext.h>
-#include <wx/statbmp.h>
-#include <wx/panel.h>
+#include <wx/scrolwin.h>
 #include <wx/listctrl.h>
+#include <wx/panel.h>
 #include <wx/calctrl.h>
 #include <wx/simplebook.h>
 #include <wx/frame.h>
@@ -48,12 +47,8 @@ class MyFrameInicioCorrectoAlumno : public wxFrame
 		wxRadioButton* m_radio_Alumnos;
 		wxRadioButton* m_radio_Bibliotecarios;
 		wxSimplebook* m_Bibliotecario_frameActual;
-		wxPanel* m_panel_Bibliotecario_Libros;
-		wxStaticText* m_staticText4;
-		wxStaticBitmap* m_bitmap2;
-		wxButton* m_button19;
-		wxStaticText* m_staticText18;
-		wxButton* m_button20;
+		wxScrolledWindow* m_panel_Bibliotecario_Libros;
+		wxBoxSizer* bSizerLibro;
 		wxPanel* m_panel_DetallesLibros;
 		wxListCtrl* m_list_InfoLibros;
 		wxButton* m_button131;
@@ -84,8 +79,10 @@ class MyFrameInicioCorrectoAlumno : public wxFrame
 		virtual void Onclick_Boton_Buscar_Frase( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRadioButton_CambiaPestana( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnButtonClickAgregar( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnButtonClickHistorialLibro( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnButtonClickEliminar( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnButtonClickPrestarLibro( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnButtonClickDevolucionLibro( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnButtonClickHistorialAlumno( wxCommandEvent& event ) { event.Skip(); }
 
 

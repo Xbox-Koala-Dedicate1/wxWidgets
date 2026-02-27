@@ -30,14 +30,14 @@ void VentanaLogin::OnclikBienvenido_Iniciar( wxCommandEvent& event )  {
 	int PosBibliotecario = BuscarDniEnBibliotecarios(dni, vectorBibliotecario);
 	
 	if(PosBibliotecario != -1){
-//		if(vectorBibliotecario[PosBibliotecario].Existencia()){
+		if(vectorBibliotecario[PosBibliotecario].Existencia()){
 			biblio = ObjetoCorrespondienteBibliotecario(PosBibliotecario, vectorBibliotecario);
 			///cout<<"?Que Quieres Hacer "<<biblio.VerNombre()<<" ?"<<endl;
 			///menuBibliotecario
 			VentanaParaBibliotecario *ventana = new VentanaParaBibliotecario(NULL);
 			ventana->Show();
 			this->Close();
-//		}
+		}
 	}
 	else{
 		int PosAlumno = BuscarDniEnAlumnos(dni,vectorAlumnos);

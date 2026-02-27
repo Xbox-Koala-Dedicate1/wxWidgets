@@ -1,7 +1,13 @@
 #include "buscador.h"
-
+#include "../libro/libro.h"
+#include "../system/system.h"
+#include <algorithm>
+#include "../Bloques/Bloques.h"
+#include "../bibliotecario/bibliotecario.h"
+#include "../alumno/alumno.h"
 using namespace std;
-vector<size_t> Buscador::BusquedaSimple(string nombreBuscado){
+vector<size_t> Buscador::BusquedaSimple(string nombreBuscado)
+{
 	
 	string nombreArchivo = diccionario.VerPathEtiquetas();
 	cout<<endl<<"Archivo a abrir: "<<nombreArchivo<<endl;
@@ -60,22 +66,6 @@ vector<size_t> Buscador::OrdenarAscendente(vector<size_t>v){
 	
 }
 
-vector<Libro>Buscador:: Busqueda_Autor(string autorBuscado, vector<Libro>&v){
-	vector<Libro> aux;
-	auto encontrado = v.begin();
-	size_t pos=0;
-	while(encontrado!=v.end()){
-		encontrado = find_if(v.begin()+pos,v.end(),[autorBuscado](const Libro& a){
-			
-			return a.VerAutor() == autorBuscado;
-		});
-		if(encontrado== v.end()){break;}
-		
-		aux.push_back(*encontrado);
-		pos=(encontrado-v.begin())+1;
-	}
-	return aux;
-}
 	
 	
 
@@ -118,6 +108,8 @@ vector<Libro>Buscador:: Busqueda_Autor(string autorBuscado, vector<Libro>&v){
 }	
 	
 
-		
+
+	
+	
 	
 	
